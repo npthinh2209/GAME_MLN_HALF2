@@ -296,9 +296,10 @@ def control_game():
 
 if __name__ == '__main__':
     local_ip = get_local_ip()
+    port = int(os.environ.get("PORT", 5001))
     print("=" * 60)
     print(f"Courtroom Game Server is running!")
-    print(f"Presenter link: http://localhost:5000")
-    print(f"Jury mobile voting link: http://{local_ip}:5000/jury")
+    print(f"Presenter link: http://localhost:{port}")
+    print(f"Jury mobile voting link: http://{local_ip}:{port}/jury")
     print("=" * 60)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)

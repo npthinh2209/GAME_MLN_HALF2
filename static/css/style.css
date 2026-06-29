@@ -869,3 +869,53 @@ body {
         padding: 16px;
     }
 }
+
+/* Background Music (BGM) Controls */
+.bgm-btn {
+    background: none;
+    border: 1.5px solid var(--gold);
+    cursor: pointer;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bgm-btn:hover {
+    color: #FFF;
+    border-color: #FFF;
+    box-shadow: 0 0 10px rgba(166, 124, 45, 0.4);
+    transform: scale(1.05);
+}
+
+.bgm-btn.playing {
+    color: var(--gold);
+    border-color: var(--gold);
+    animation: rotateBgmBtn 12s linear infinite;
+}
+
+@keyframes rotateBgmBtn {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.bgm-volume-slider {
+    width: 100%;
+    cursor: pointer;
+    accent-color: var(--gold);
+    background: #2b1d16;
+    height: 4px;
+    border-radius: 2px;
+    outline: none;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.bgm-volume-slider:hover {
+    background: #3d2a20;
+}
+
