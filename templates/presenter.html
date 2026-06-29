@@ -235,13 +235,13 @@
     <!-- AUDIO SOUNDS FOR COURTROOM AMBIANCE -->
     <audio id="gavel-sound" src="https://assets.mixkit.co/active_storage/sfx/2190/2190-84.wav" preload="auto"></audio>
     <audio id="timer-sound" src="https://assets.mixkit.co/active_storage/sfx/2569/2569-84.wav" preload="auto"></audio>
-    <audio id="bgm-sound" src="{{ url_for('static', filename='mln-nhac-nen.mp4') }}" loop preload="auto"></audio>
+    <audio id="bgm-sound" src="{{ url_for('static', filename='nhac-nen-v2.MP4') }}" loop preload="auto"></audio>
 
     <script>
         // Background Music (BGM) Controls
         let bgmPlaying = false;
         const bgmTracks = {
-            "court": "{{ url_for('static', filename='mln-nhac-nen.mp4') }}",
+            "court": "{{ url_for('static', filename='nhac-nen-v2.MP4') }}",
             "debate": "{{ url_for('static', filename='debate.mp4') }}"
         };
 
