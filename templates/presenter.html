@@ -745,6 +745,23 @@
             renderControls();
         }
 
+        function formatEffectText(text) {
+            if (!text) return "";
+            const parts = text.split('.').map(part => part.trim()).filter(part => part.length > 0);
+            const formattedParts = parts.map(part => {
+                const isDecrease = /giảm|mất/i.test(part);
+                const isIncrease = /tăng|thêm/i.test(part);
+                if (isDecrease) {
+                    return `<span style="color: var(--defendant); font-weight: bold;">${part}</span>`;
+                } else if (isIncrease) {
+                    return `<span style="color: var(--jury); font-weight: bold;">${part}</span>`;
+                } else {
+                    return `<span style="color: var(--text-dark); font-weight: normal;">${part}</span>`;
+                }
+            });
+            return formattedParts.join('. ') + '.';
+        }
+
         function renderCenterScreen() {
             const screen = document.getElementById("court-screen");
 
@@ -899,7 +916,7 @@
                         <div class="judgment-card" style="border: 2px solid var(--border-gold); background: var(--bg-inner-parchment);">
                             <h3 class="judgment-title" style="color: var(--gold-dark);">${outcome.title}</h3>
                             <p class="judgment-body" style="color: var(--text-dark); font-weight: 600; margin-bottom: 8px;">${outcome.desc}</p>
-                            <p style="font-size: 0.95rem; color: var(--jury); font-weight: bold;">Biến động chỉ số: ${outcome.effect}</p>
+                            <p style="font-size: 0.95rem; color: var(--text-dark); font-weight: bold;">Biến động chỉ số: ${formatEffectText(outcome.effect)}</p>
                         </div>
  
                         <div class="narrative-box" style="border-left: 4px solid var(--gold-dark); background: var(--bg-inner-parchment); margin-bottom: 0;">
