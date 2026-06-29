@@ -39,24 +39,36 @@
                 <div class="header-jury-card" style="border-bottom: 1px solid rgba(166, 124, 45, 0.2); padding-bottom: 6px;">
                     Bồi thẩm đoàn: <strong id="jury-count">0</strong> online
                 </div>
-                <div class="bgm-controller" style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; padding-top: 4px;">
-                    <button id="bgm-play-btn" class="bgm-btn" onclick="toggleBGM()" title="Phát/Tạm dừng nhạc nền">
-                        <!-- Play SVG icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" id="bgm-play-icon">
-                            <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-                        </svg>
-                        <!-- Pause SVG icon (hidden by default) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" id="bgm-pause-icon" style="display: none;">
-                            <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
-                        </svg>
-                    </button>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; max-width: 180px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-serif); text-transform: uppercase; letter-spacing: 0.5px;">
-                            <span>Nhạc nền</span>
-                            <span id="bgm-vol-txt">20%</span>
+                <div class="bgm-controller" style="display: flex; flex-direction: column; gap: 8px; width: 100%; padding-top: 4px;">
+                    <!-- Top control row: Play Button + Volume Slider -->
+                    <div style="display: flex; align-items: center; gap: 12px; justify-content: center; width: 100%;">
+                        <button id="bgm-play-btn" class="bgm-btn" onclick="toggleBGM()" title="Phát/Tạm dừng nhạc nền">
+                            <!-- Play SVG icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" id="bgm-play-icon">
+                                <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                            </svg>
+                            <!-- Pause SVG icon (hidden by default) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" id="bgm-pause-icon" style="display: none;">
+                                <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                            </svg>
+                        </button>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; max-width: 180px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-serif); text-transform: uppercase; letter-spacing: 0.5px;">
+                                <span>Âm lượng</span>
+                                <span id="bgm-vol-txt">20%</span>
+                            </div>
+                            <input type="range" id="bgm-volume" class="bgm-volume-slider" min="0" max="1" step="0.05" value="0.2" oninput="changeBGMVolume(this.value)">
                         </div>
-                        <input type="range" id="bgm-volume" class="bgm-volume-slider" min="0" max="1" step="0.05" value="0.2" oninput="changeBGMVolume(this.value)">
+                    </div>
+                    
+                    <!-- Bottom control row: Track Selector -->
+                    <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                        <span style="font-size: 0.72rem; color: var(--gold); font-family: var(--font-serif); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">Bản nhạc:</span>
+                        <select id="bgm-track-select" onchange="changeBGMTrack(this.value)" class="bgm-select">
+                            <option value="court">Phiên Tòa (Chính)</option>
+                            <option value="debate">Tranh Luận (Debate)</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -228,6 +240,11 @@
     <script>
         // Background Music (BGM) Controls
         let bgmPlaying = false;
+        const bgmTracks = {
+            "court": "{{ url_for('static', filename='mln-nhac-nen.mp4') }}",
+            "debate": "{{ url_for('static', filename='debate.mp4') }}"
+        };
+
         function toggleBGM() {
             const bgm = document.getElementById("bgm-sound");
             const playIcon = document.getElementById("bgm-play-icon");
@@ -259,6 +276,36 @@
             const bgm = document.getElementById("bgm-sound");
             bgm.volume = parseFloat(val);
             document.getElementById("bgm-vol-txt").textContent = Math.round(val * 100) + "%";
+        }
+
+        function changeBGMTrack(trackKey) {
+            const bgm = document.getElementById("bgm-sound");
+            const wasPlaying = bgmPlaying;
+            
+            if (bgmPlaying) {
+                bgm.pause();
+            }
+            
+            bgm.src = bgmTracks[trackKey];
+            bgm.load();
+            
+            const volSlider = document.getElementById("bgm-volume");
+            bgm.volume = parseFloat(volSlider.value);
+            
+            if (wasPlaying) {
+                bgm.play().then(() => {
+                    bgmPlaying = true;
+                }).catch(e => {
+                    console.log("Track play failed:", e);
+                    bgmPlaying = false;
+                    const playIcon = document.getElementById("bgm-play-icon");
+                    const pauseIcon = document.getElementById("bgm-pause-icon");
+                    const playBtn = document.getElementById("bgm-play-btn");
+                    playIcon.style.display = "block";
+                    pauseIcon.style.display = "none";
+                    playBtn.classList.remove("playing");
+                });
+            }
         }
 
         // Handle autoplay policy - play BGM on first user interaction if they haven't manually started it

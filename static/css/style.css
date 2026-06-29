@@ -919,3 +919,26 @@ body {
     background: #3d2a20;
 }
 
+.bgm-select {
+    background-color: #2b1d16;
+    border: 1px solid var(--border-gold);
+    color: var(--text-muted);
+    font-family: var(--font-serif);
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    outline: none;
+    cursor: pointer;
+    flex-grow: 1;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bgm-select:hover, .bgm-select:focus {
+    border-color: #FFF;
+    color: #FFF;
+    background-color: #3d2a20;
+}
+
+
